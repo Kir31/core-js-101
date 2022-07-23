@@ -19,8 +19,9 @@
  *    'Tue, 26 Jan 2016 13:48:02 GMT' => Date()
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
-function parseDataFromRfc2822(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromRfc2822(value) {
+  // throw new Error('Not implemented');
+  return new Date(value);
 }
 
 /**
@@ -34,8 +35,9 @@ function parseDataFromRfc2822(/* value */) {
  *    '2016-01-19T16:07:37+00:00'    => Date()
  *    '2016-01-19T08:07:37Z' => Date()
  */
-function parseDataFromIso8601(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromIso8601(value) {
+  // throw new Error('Not implemented');
+  return Date.parse(value);
 }
 
 
@@ -53,8 +55,10 @@ function parseDataFromIso8601(/* value */) {
  *    Date(2012,1,1)    => true
  *    Date(2015,1,1)    => false
  */
-function isLeapYear(/* date */) {
-  throw new Error('Not implemented');
+function isLeapYear(date) {
+  // throw new Error('Not implemented');
+  return ((date.getFullYear() % 4 === 0) && (date.getFullYear() % 100 !== 0))
+  || (date.getFullYear() % 400 === 0);
 }
 
 
@@ -73,8 +77,20 @@ function isLeapYear(/* date */) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,10,0,0,250)     => "00:00:00.250"
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
-function timeSpanToString(/* startDate, endDate */) {
-  throw new Error('Not implemented');
+function timeSpanToString(startDate, endDate) {
+  // throw new Error('Not implemented');
+  const t = endDate.getTime() - startDate.getTime();
+  const s = Math.trunc(t / 1000);
+  const m = Math.trunc(s / 60);
+  const h = Math.trunc(m / 60);
+  const sss = t - s * 1000;
+  let msec = t - s * 1000;
+  if (sss > 9 && sss < 100) msec = `0${t - s * 1000}`;
+  if (sss < 10) msec = `00${t - s * 1000}`;
+  const sec = `${s - m * 60}`.length > 1 ? `${s - m * 60}` : `0${s - m * 60}`;
+  const min = `${m - h * 60}`.length > 1 ? `${m - h * 60}` : `0${m - h * 60}`;
+  const hour = `${Math.trunc(m / 60)}`.length > 1 ? `${Math.trunc(m / 60)}` : `0${Math.trunc(m / 60)}`;
+  return `${hour}:${min}:${sec}.${msec}`;
 }
 
 
